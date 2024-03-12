@@ -1,25 +1,22 @@
 'use client';
 
-import Cookies from 'js-cookie';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Alert, Form, Input, Button } from 'antd';
 import { signInWithEmailAndPassword } from "firebase/auth";
+import type { ILogin } from './ILogin';
 
 import { auth } from '@/firebase';
 import { URL_HOME } from '@/consts/routes';
-
-interface LoginFormValues {
-  email: string;
-  password: string;
-}
 
 const Login = (): JSX.Element => {
   const router = useRouter();
   const [form] = Form.useForm();
   const [error, setError] = useState<{ message: string } | null>(null);
 
-  const onFinish = (values: LoginFormValues) => {
+  const onFinish = (values: ILogin.LoginFormValues) => {
     const { email, password } = values;
     signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
@@ -76,7 +73,7 @@ const Login = (): JSX.Element => {
         >
           <Input.Password />
         </Form.Item>
-        <span>Don't have an account? signup</span>
+        <span>Don't have an account? <Link href="/sign-up">sign up</Link></span>
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
